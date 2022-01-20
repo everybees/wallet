@@ -20,6 +20,5 @@ from django.shortcuts import render
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path("", hello_jerry)
     path("accounts/", include('accounts.urls'))
 ]
