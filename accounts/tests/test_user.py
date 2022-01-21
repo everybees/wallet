@@ -13,7 +13,11 @@ class AnimalTestCase(TestCase):
         self.user_2 = User.objects.create(first_name="Jane", last_name="Doe")
 
     def test_user_signup(self):
+
+        response = self.client.post
         self.assertEqual(self.user.first_name, "John")
+        self.assertEqual(self.user.password, "my_password")
+        self.assertNotEqual(self.user.password, "jsgdsgdlhsdu")
 
     def test_if_signup_info_exists(self):
         self.assertEqual(self.user_2.first_name, "Jane")

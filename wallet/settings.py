@@ -83,7 +83,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wallet.wsgi.application'
 
 
-# Database
+# Database for sqlite3
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # DATABASES = {
@@ -93,15 +93,23 @@ WSGI_APPLICATION = 'wallet.wsgi.application'
 #     }
 # }
 
+
+# local postgres database
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('DB_NAME'),
+#         'USER': env('DB_USER'),
+#         'PASSWORD': env('DB_PASSWORD'),
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
+
+
+# database on heroku
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+    'default': env('DATABASE_URL', cast=dj_database_url.parse),
 }
 
 
@@ -149,3 +157,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'wallet/static')]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+prod_db = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(prod_db)
