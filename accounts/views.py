@@ -10,6 +10,7 @@ from accounts.serializers import UserSerializer
 from accounts.models import User, Wallet
 
 from permissions import IsAdmin, IsElite, IsNoob
+from rest_framework.permissions import IsAuthenticated
 
 
 def hello_world(request):
@@ -43,7 +44,8 @@ class UserViewSet(viewsets.ViewSet):
 
         return Response(serializer.data, status=201)
 
-    @action(detail=False, methods=['get'], permission_classes=[])
+    # IsAuthenticated works for users that are logged in
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def get_users(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
