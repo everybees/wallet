@@ -37,7 +37,8 @@ class UserViewSet(viewsets.ViewSet):
             return Response(serializer.errors, status=400)
         user = serializer.save()
         Wallet.objects.create(
-            user=user, wallet_id=generate_wallet_id(), is_default=True, currency='USD',
+            user=user, wallet_id=generate_wallet_id(), is_default=True, 
+            currency=request.data.get('currency', 'NGN'),
         )
 
         return Response(serializer.data, status=201)
