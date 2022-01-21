@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from accounts.serializers import UserSerializer
 from accounts.models import User, Wallet
 
+from permissions import IsAdmin, IsElite, IsNoob
+
 
 def hello_world(request):
     return render(request, "hello_world.html")
@@ -40,7 +42,7 @@ class UserViewSet(viewsets.ViewSet):
 
         return Response(serializer.data, status=201)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[])
     def get_users(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
