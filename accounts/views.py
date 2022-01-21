@@ -3,7 +3,6 @@ from rest_framework import viewsets
 import string
 import random
 
-# Create your views here.
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -32,14 +31,13 @@ class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def signup(self, request):
         serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            Wallet.objects.create(
-                user=user, wallet_id=generate_wallet_id(), is_default=True, currency='USD',
-            )
-
-        else:
+        if not serializer.is_valid():
             return Response(serializer.errors, status=400)
+        user = serializer.save()
+        Wallet.objects.create(
+            user=user, wallet_id=generate_wallet_id(), is_default=True, currency='USD',
+        )
+
         return Response(serializer.data, status=200)
 
     @action(detail=False, methods=['get'])
