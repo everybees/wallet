@@ -38,10 +38,17 @@ class UserViewSet(viewsets.ViewSet):
             user=user, wallet_id=generate_wallet_id(), is_default=True, currency='USD',
         )
 
-        return Response(serializer.data, status=200)
+        return Response(serializer.data, status=201)
 
     @action(detail=False, methods=['get'])
     def get_users(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=200)
+
+
+class WalletViewSet(viewsets.ViewSet):
+    
+    @action(detail=False, methods=['post'])
+    def create_wallet(self, request):
+        return Response({"message": "Wallet created successfully"}, status=200)

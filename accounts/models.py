@@ -12,6 +12,7 @@ USER_TYPE = (
 class User(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    username = models.CharField(max_length=100, unique=True, default='u2qhdekhdw')
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=50, default="my_password")
     user_type = models.CharField(max_length=6, choices=USER_TYPE, default='noob')
