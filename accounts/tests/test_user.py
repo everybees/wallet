@@ -11,21 +11,22 @@ class AnimalTestCase(TestCase):
 
         # this mimics a signup process with information collected
         self.user = User.objects.create(
-            first_name="John", last_name="Doe", email="john@email.com"
-            )
+            first_name="John", last_name="Doe", email="john@email.com", username="john"
+        )
         self.user_2 = User.objects.create(
             first_name="Jane", last_name="Doe", email="jane@email.com"
-            )
+        )
 
     def test_user_signup(self):
-
         response = self.client.post(reverse('users-signup'))
         self.assertEqual(response.status_code, 400)
 
         signup_data = {
             "first_name": "Janet",
             "last_name": "Doe",
-            "email": "janet@email.com"
+            "email": "janet@email.com",
+            "username": "janet",
+            "password": "my_password"
         }
 
         response = self.client.post(reverse('users-signup'), data=signup_data, format='json')
@@ -33,3 +34,19 @@ class AnimalTestCase(TestCase):
 
     def test_if_signup_info_exists(self):
         self.assertEqual(self.user_2.first_name, "Jane")
+
+    def test_can_promote_user(self):
+        # given
+        signup_data = {
+            "first_name": "Janet",
+            "last_name": "Doe",
+            "email": "janet@email.com",
+            "username": "janet",
+            "password": "my_password"
+        }
+        response = self.client.post(reverse('users-signup'), data=signup_data, format='json')
+
+        # when
+
+
+        pass
