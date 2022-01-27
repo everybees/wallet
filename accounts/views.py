@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils.datetime_safe import datetime
 from rest_framework import viewsets
 import string
 import random
@@ -7,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from accounts.serializers import UserSerializer
-from accounts.models import User, Wallet
+from accounts.models import User, Wallet, Transaction, TRANSACTION_TYPE
 
 from permissions import IsAdmin, IsElite, IsNoob
 from rest_framework.permissions import IsAuthenticated
@@ -85,6 +86,22 @@ class UserViewSet(viewsets.ViewSet):
 
         except Exception as exception:
             return Response({"message": str(exception)}, status=400)
+
+
+class WithdrawViewSet(viewsets.ViewSet):
+
+    @action(detail=False, methods=['post'])
+    def withdraw(self, request):
+        amount = request.data.get('amount')
+        wallet_id = request.data.get('id')
+        wallet = Wallet.objects.get(wallet_id=wallet_id)
+        wallet.balance = wallet.balance - amount
+        Wallet.objects.update(wallet)
+
+        Transaction.objects.create(
+            Transaction(wallet=wallet, amount=amount, transaction_type=TRANSACTION_TYPE('withdrawal'),
+                        date_created=datetime.now()))
+        return Response({"message": 'you have successfully withdrawn'}, amount)
 
 
 class WalletViewSet(viewsets.ViewSet):

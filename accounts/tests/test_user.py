@@ -32,6 +32,7 @@ class UserTestCase(TestCase):
             first_name="Jane", last_name="Doe", email="jane@email.com", username="jane", password="my_password"
         )
 
+
     def test_user_signup(self):
         response = self.client.post(reverse('users-signup'))
         self.assertEqual(response.status_code, 400)
