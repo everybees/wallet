@@ -3,13 +3,14 @@ from accounts.views import hello_world, hello_jerry
 from rest_framework import routers
 from rest_framework.authtoken import views
 
-from .views import UserViewSet, WalletViewSet
+from .views import UserViewSet, WalletViewSet, WithdrawViewSet
 
 
 router = routers.DefaultRouter(trailing_slash=False)
 
 router.register('users', UserViewSet, 'users')
 router.register('wallets', WalletViewSet, 'wallets')
+router.register('withdrawal', WithdrawViewSet, 'withdraw')
 
 
 urlpatterns = [

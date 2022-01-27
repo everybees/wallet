@@ -17,6 +17,7 @@ class AnimalTestCase(TestCase):
             first_name="Jane", last_name="Doe", email="jane@email.com"
             )
 
+
     def test_user_signup(self):
 
         response = self.client.post(reverse('users-signup'))
