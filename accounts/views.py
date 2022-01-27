@@ -20,12 +20,13 @@ def hello_world(request):
 def hello_jerry(request):
     return render(request, "hello_jerry.html")
 
+
 def generate_wallet_id():
-    S = 10  
-    ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
+    S = 10
+    ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k=S))
     wallets = Wallet.objects.all().values_list('wallet_id', flat=True)
     while str(ran) in wallets:
-        ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
+        ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k=S))
     return str(ran)
 
 
@@ -38,7 +39,7 @@ class UserViewSet(viewsets.ViewSet):
             return Response(serializer.errors, status=400)
         user = serializer.save()
         Wallet.objects.create(
-            user=user, wallet_id=generate_wallet_id(), is_default=True, 
+            user=user, wallet_id=generate_wallet_id(), is_default=True,
             currency=request.data.get('currency', 'NGN'),
         )
 
@@ -51,9 +52,24 @@ class UserViewSet(viewsets.ViewSet):
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=200)
 
+    @action(detail=False, methods=['put'])
+    def demote_user(self, request):
+        try:
+            user_id = request.data.get("id")
+
+            user = User.objects.get(id=user_id)
+            if user.user_type == "elite":
+                user.user_type = 'noob'
+                user.save()
+                serializer = UserSerializer(user)
+                return Response(serializer.data, status=200)
+
+        except Exception as e:
+            return Response({"message": str(e)}, status=400)
+
 
 class WalletViewSet(viewsets.ViewSet):
-    
+
     @action(detail=False, methods=['post'])
     def create_wallet(self, request):
         return Response({"message": "Wallet created successfully"}, status=200)
