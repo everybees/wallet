@@ -21,7 +21,7 @@ class IsAdmin(BasePermission):
         if request.auth is None:
             return False
         token = Token.objects.get(key=request.auth.key)
-        is_admin = token.user.user_type == "admin"
+        is_admin = token.user_data.user_type == "admin"
         return bool(is_admin)
 
 
@@ -30,7 +30,7 @@ class IsElite(BasePermission):
         if request.auth is None:
             return False
         token = Token.objects.get(key=request.auth.key)
-        is_elite = token.user.user_type == 'elite'
+        is_elite = token.user_data.user_type == 'elite'
         return bool(is_elite)
 
 
@@ -39,5 +39,5 @@ class IsNoob(BasePermission):
         if request.auth is None:
             return False
         token = Token.objects.get(key=request.auth.key)
-        is_noob = token.user.user_type == 'noob'
+        is_noob = token.user_data.user_type == 'noob'
         return bool(is_noob)

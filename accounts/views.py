@@ -58,14 +58,33 @@ class UserViewSet(viewsets.ViewSet):
             user_id = request.data.get("id")
 
             user = User.objects.get(id=user_id)
-            if user.user_type == "elite":
+            if user.user_type == 'elite':
                 user.user_type = 'noob'
                 user.save()
                 serializer = UserSerializer(user)
                 return Response(serializer.data, status=200)
-
+            if user.user_type == 'noob':
+                return Response("User can't be demoted!", status=400)
         except Exception as e:
             return Response({"message": str(e)}, status=400)
+
+    @action(detail=False, methods=["put"])
+    def promote_user(self, request):
+        try:
+            user_id = request.data.get("id")
+            user = User.objects.get(id=user_id)
+
+            if user.user_type == "noob":
+                user.user_type = "elite"
+                user.save()
+
+                serializer = UserSerializer(user)
+                return Response(serializer.data, status=200)
+            elif user.user_type == 'elite':
+                return Response('User cannot be promoted!', status=400)
+
+        except Exception as exception:
+            return Response({"message": str(exception)}, status=400)
 
 
 class WalletViewSet(viewsets.ViewSet):
