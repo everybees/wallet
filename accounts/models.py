@@ -10,6 +10,7 @@ USER_TYPE = (
     ('admin', 'Admin'),
 )
 
+
 class User(AbstractUser):
     user_type = models.CharField(max_length=6, choices=USER_TYPE, default='noob')
 
@@ -34,6 +35,7 @@ TRANSACTION_TYPE = (
     ('withdrawal', 'Withdrawal'),
     ('funding', 'Funding'),
 )
+
 
 class Transaction(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.DO_NOTHING)
