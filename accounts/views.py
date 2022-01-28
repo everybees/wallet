@@ -64,7 +64,7 @@ class UserViewSet(viewsets.ViewSet):
                 user.save()
                 serializer = UserSerializer(user)
                 return Response(serializer.data, status=200)
-            if user.user_type == 'noob':
+            elif user.user_type == 'noob':
                 return Response("User can't be demoted!", status=400)
         except Exception as e:
             return Response({"message": str(e)}, status=400)

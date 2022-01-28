@@ -32,7 +32,6 @@ class UserTestCase(TestCase):
             first_name="Jane", last_name="Doe", email="jane@email.com", username="jane", password="my_password"
         )
 
-
     def test_user_signup(self):
         response = self.client.post(reverse('users-signup'))
         self.assertEqual(response.status_code, 400)
@@ -66,11 +65,9 @@ class UserTestCase(TestCase):
         # assert
         self.assertEqual(noob_user_response.status_code, 400)
 
-        pass
 
     def test_can_promote_noob_user(self):
         response = self.client.post(reverse("users-signup"), data=self.user_data, format='json')
-        self.assertEqual(response.data['id'], 4)
         promoted_user_response = self.client.put(reverse("users-promote-user"), data=response.data, format="json")
         self.assertEqual(promoted_user_response.data['user_type'], 'elite')
 
@@ -81,3 +78,12 @@ class UserTestCase(TestCase):
         elite_user_response = self.client.put(reverse('users-promote-user'), data=response.data, format='json')
         # assert
         self.assertEqual(elite_user_response.status_code, 400)
+
+
+    def test_can_approve_funding(self):
+        # given
+        response = self.client.post(reverse("users-signup"), data=self.user_data, format='json')
+
+        pass
+
+
